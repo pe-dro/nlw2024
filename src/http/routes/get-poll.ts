@@ -2,6 +2,7 @@ import { FastifyInstance } from 'fastify'
 import { prisma } from '../../lib/prisma'
 import { redis } from '../../lib/redis'
 import { z } from 'zod'
+import axios from 'axios'
 
 export async function getPoll(app: FastifyInstance) {
     app.get('/polls/:pollId', async (request, reply) => {
@@ -56,4 +57,24 @@ export async function getPoll(app: FastifyInstance) {
             }
          })
     })  
+
+    app.get('/id/:pollId', async (request, reply) => {
+        const getPollParams = z.object({
+            pollId: z.string().uuid(),
+        })
+        const { pollId } = getPollParams.parse(request.params)
+
+        try {
+            // Fazendo solicitação à rota que retorna o JSON
+            const response = await axios.get(`${process.env.API_URL}/${pollId}`);
+            const poll = response.data.poll;
+
+            // Renderizando a visualização com os dados da pesquisa
+            return reply.view("src/http/views/vote-on-poll.ejs", { poll });
+        } catch (error) {
+            console.error('Erro ao obter dados da pesquisa:', error);
+            return reply.status(500).send('Erro ao obter dados da pesquisa');
+        }
+
+    })
 }

@@ -5,17 +5,35 @@ import { getPoll } from './routes/get-poll'
 import { voteOnPoll } from './routes/vote-on-poll'
 import fastifyWebsocket from '@fastify/websocket'
 import { pollResults } from './ws/poll-results'
-
+import fastifyView from '@fastify/view'
+import fastifyStatic from '@fastify/static'
+import path from 'path';
+import { getMain } from './routes/main'
 
 const app = fastify()
+
+const root =   path.join(__dirname, 'public')
+console.log(root)
 
 app.register(cookie, {
     secret: "password123", 
     hook: 'onRequest',    
 })
 
+app.register(fastifyView, {
+    engine: {
+        ejs: require("ejs"),
+      }    
+})
+
+app.register(fastifyStatic, {
+    root: path.join(__dirname, 'public'),
+    prefix: '/public/'
+  })
+
 app.register(fastifyWebsocket)
 
+app.register(getMain);
 app.register(createPoll)
 app.register(getPoll)
 app.register(voteOnPoll)
