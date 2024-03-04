@@ -66,11 +66,11 @@ export async function getPoll(app: FastifyInstance) {
 
         try {
             // Fazendo solicitação à rota que retorna o JSON
-            const response = await axios.get(`${process.env.API_URL}/${pollId}`);
+            const response = await axios.get(`${process.env.API_URL}${pollId}`);
             const poll = response.data.poll;
 
             // Renderizando a visualização com os dados da pesquisa
-            return reply.view("src/http/views/vote-on-poll.ejs", { poll });
+            return reply.view("vote-on-poll.ejs", { poll });
         } catch (error) {
             console.error('Erro ao obter dados da pesquisa:', error);
             return reply.status(500).send('Erro ao obter dados da pesquisa');

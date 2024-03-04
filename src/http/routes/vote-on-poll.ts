@@ -18,7 +18,8 @@ export async function voteOnPoll(app: FastifyInstance) {
         const { pollId } = voteOnPollParams.parse(request.params)
         const { pollOptionId } = voteOnPollBody.parse(request.body)
 
-        let { sessionId } = request.cookies
+        // let { sessionId } = request.cookies
+        let  sessionId  = randomUUID()
 
         if (sessionId){
             const userPreviewsVoteOnPoll = await prisma.vote.findUnique({
@@ -49,7 +50,7 @@ export async function voteOnPoll(app: FastifyInstance) {
         
 
             } else if (userPreviewsVoteOnPoll){
-                return reply.status(400).send({nessage: 'Você já votou nesta enquete.'})
+                return reply.status(400).send({message: 'Você já votou nesta enquete.'})
             }
         }
 

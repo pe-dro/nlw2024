@@ -9,6 +9,7 @@ import fastifyView from '@fastify/view'
 import fastifyStatic from '@fastify/static'
 import path from 'path';
 import { getMain } from './routes/main'
+import { fastifyFavicon } from 'fastify-favicon'
 
 const app = fastify()
 
@@ -23,7 +24,8 @@ app.register(cookie, {
 app.register(fastifyView, {
     engine: {
         ejs: require("ejs"),
-      }    
+      },
+      templates: path.join(__dirname, 'views'),  
 })
 
 app.register(fastifyStatic, {
@@ -32,6 +34,7 @@ app.register(fastifyStatic, {
   })
 
 app.register(fastifyWebsocket)
+app.register(fastifyFavicon, { path: path.join(__dirname, 'public'), name: 'favicon.png', maxAge: 3600 })
 
 app.register(getMain);
 app.register(createPoll)
