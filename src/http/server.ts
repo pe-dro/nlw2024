@@ -34,7 +34,7 @@ app.register(fastifyStatic, {
   })
 
 app.register(fastifyWebsocket)
-app.register(fastifyFavicon, { path: path.join(__dirname, 'public'), name: 'favicon.png', maxAge: 3600 })
+app.register(fastifyFavicon, { path: path.join(__dirname, 'public'), name: 'favicon.ico', maxAge: 3600 })
 
 app.register(getMain);
 app.register(createPoll)

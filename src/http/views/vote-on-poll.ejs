@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        <%= poll.title %>
+        <%= poll.title %> | EasyPoll
     </title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
@@ -25,7 +25,7 @@
                     <article>
                         <label>
                             <input type="radio" name="option" data-id="<%= option.id %>"/>
-                            <%= option.title %> <span data-id="<%= option.id %>" style="filter: opacity(0.8);"> - <%= option.score %> votos  (<%= Number((option.score / totalVotes) * 100).toFixed(1) %>%)</span>
+                            <%= option.title %> <span data-id="<%= option.id %>" style="filter: opacity(0.8);"> - <%= option.score %> votos  (<%= Number((option.score / totalVotes) * 100 || 0 ).toFixed(1) %>%)</span>
                         </label>
                         <progress value="<%= (option.score / totalVotes) * 100 %>" max="100"
                             data-id="<%= option.id %>" />

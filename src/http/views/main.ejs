@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulário de Enquete</title>
+    <title>Crie sua enquete! | EasyPoll</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
 </head>
 
@@ -17,15 +17,15 @@
             <fieldset id="optionsFieldset">
                 <label for="title">
                     <input name="title" id="title" type="text" style="font-weight: bold;"
-                        placeholder="Digite o título da enquete" required/>
+                        placeholder="Digite o título da enquete" required maxlength="200" />
                 </label>
 
                 <label for="option1">
-                    <input name="options1" id="option1" type="text" class="option" placeholder="Digite uma opção" />
+                    <input name="options1" id="option1" type="text" class="option" placeholder="Digite uma opção" maxlength="200"/>
                 </label>
 
                 <label for="option2">
-                    <input name="options2" id="option2" type="text" class="option" placeholder="Digite uma opção" />
+                    <input name="options2" id="option2" type="text" class="option" placeholder="Digite uma opção" maxlength="200"/>
                 </label>
             </fieldset>
             <fieldset>
@@ -64,7 +64,7 @@
 
                 if (optionCount <= 5) {
                     const newOptionLabel = `<label for="option${optionCount}" style="position: relative;">
-                                        <input name="options${optionCount}" id="option${optionCount}" type="text" class="option more-option" placeholder="Digite uma opção"/>
+                                        <input name="options${optionCount}" id="option${optionCount}" type="text" class="option more-option" placeholder="Digite uma opção" maxlength="200"/>
                                         </label>`
                     optionsContainer.insertAdjacentHTML('beforeend', newOptionLabel);
 
