@@ -25,7 +25,7 @@
                     <article>
                         <label>
                             <input type="radio" name="option" data-id="<%= option.id %>"/>
-                            <%= option.title %> <span data-id="<%= option.id %>">(<%= option.score %>)</span>
+                            <%= option.title %> <span data-id="<%= option.id %>" style="filter: opacity(0.8);"> - <%= option.score %> votos  (<%= Number((option.score / totalVotes) * 100).toFixed(1) %>%)</span>
                         </label>
                         <progress value="<%= (option.score / totalVotes) * 100 %>" max="100"
                             data-id="<%= option.id %>" />
@@ -38,9 +38,9 @@
     <section class="container" style="position: relative; margin-bottom: 0px;">
     <h4>Compartilhe</h4>
     </section>  
-    <section class="container" style="position: relative; margin-bottom: 0px;">
-        <input type="text" id="copy" onclick="copy()" style="cursor: pointer; padding-right: 30px; margin-bottom: 0px;" readonly>
-        <svg style="cursor: pointer;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="white" width="25px"><path d="M384 336H192c-8.8 0-16-7.2-16-16V64c0-8.8 7.2-16 16-16l140.1 0L400 115.9V320c0 8.8-7.2 16-16 16zM192 384H384c35.3 0 64-28.7 64-64V115.9c0-12.7-5.1-24.9-14.1-33.9L366.1 14.1c-9-9-21.2-14.1-33.9-14.1H192c-35.3 0-64 28.7-64 64V320c0 35.3 28.7 64 64 64zM64 128c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H256c35.3 0 64-28.7 64-64V416H272v32c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V192c0-8.8 7.2-16 16-16H96V128H64z"/></svg>
+    <section class="container" style="position: relative; margin-bottom: 20vh;">
+        <input type="text" id="copy" onclick="copy()" style="cursor: pointer; padding-right: 30px; margin-bottom: 0px; text-overflow: ellipsis;" readonly value="">
+        <svg onclick="copy()" style="cursor: pointer;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="white" width="20px"><path d="M384 336H192c-8.8 0-16-7.2-16-16V64c0-8.8 7.2-16 16-16l140.1 0L400 115.9V320c0 8.8-7.2 16-16 16zM192 384H384c35.3 0 64-28.7 64-64V115.9c0-12.7-5.1-24.9-14.1-33.9L366.1 14.1c-9-9-21.2-14.1-33.9-14.1H192c-35.3 0-64 28.7-64 64V320c0 35.3 28.7 64 64 64zM64 128c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H256c35.3 0 64-28.7 64-64V416H272v32c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V192c0-8.8 7.2-16 16-16H96V128H64z"/></svg>
     </section>
 
     <script>
@@ -50,6 +50,8 @@
             return acc + option.score;
         }, 0);
 
+        console.log(totalVotes)
+
         var socket = new WebSocket(`ws://${window.location.host}/polls/${window.location.href.split('/').pop()}/results`);
 
         socket.onopen = function (event) {
@@ -58,14 +60,22 @@
 
         socket.onmessage = function (event) {
             var newData = JSON.parse(event.data);
-            var scoreBar = document.querySelector(`progress[data-id="${newData.pollOptionId}"]`);
-            if(totalVotes = 1){
-                scoreBar.setAttribute("value", (newData.votes / 1) * 100)
-            } else {
-                scoreBar.setAttribute("value", (newData.votes / totalVotes) * 100)
-            }            
-            var scoreCount = document.querySelector(`span[data-id="${newData.pollOptionId}"]`);
-            scoreCount.textContent = `(${newData.votes})`
+
+            for (let i = 0; i < pollData.options.length; i++){
+                if(pollData.options[i].id == newData.pollOptionId){
+                    pollData.options[i].score = newData.votes
+                }
+            }
+            
+            totalVotes = pollData.options.reduce(function (acc, option) {
+            return acc + option.score;
+            }, 0);
+
+            pollData.options.forEach(function(option) {
+                document.querySelector(`progress[data-id="${option.id}"]`).setAttribute("value", (option.score / totalVotes) * 100)
+                document.querySelector(`span[data-id="${option.id}"]`).textContent = ` - ${option.score} votos (${Number((option.score / totalVotes) * 100).toFixed(1)}%)` 
+            })
+
 
         };
 
@@ -132,7 +142,11 @@
                 top: 50%;
                 transform: translateY(-50%);
             }
-            
+            @media (max-width: 500px) {
+                section svg {
+                right: 30px;
+            }  
+            }
         </style>
 
 </body>

@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch src/http/server.ts"
+    "dev": "tsx watch src/http/server.ts",
+    "build": "tsc",
+    "start": "pm2 start src/http/server.js --name poll-app"
   },
   "keywords": [],
   "author": "",

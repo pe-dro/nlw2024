@@ -18,8 +18,10 @@ export async function voteOnPoll(app: FastifyInstance) {
         const { pollId } = voteOnPollParams.parse(request.params)
         const { pollOptionId } = voteOnPollBody.parse(request.body)
 
-        // let { sessionId } = request.cookies
-        let  sessionId  = randomUUID()
+        let { sessionId } = request.cookies
+
+        // Permite votar mais de uma vez para testes
+        // let  sessionId  = randomUUID()
 
         if (sessionId){
             const userPreviewsVoteOnPoll = await prisma.vote.findUnique({

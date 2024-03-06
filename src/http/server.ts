@@ -42,6 +42,6 @@ app.register(getPoll)
 app.register(voteOnPoll)
 app.register(pollResults)
 
-app.listen({ port: 3333 }).then(() => {
-console.log('Server running.')
+app.listen({ port: 3333 }).then((address) => {
+console.log(`Server running in ${address}.`)
 })
